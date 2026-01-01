@@ -467,6 +467,34 @@
             font-size: 13px;
         }
         
+        /* Ссылки поддержки */
+        .support-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .support-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(30, 35, 60, 0.5);
+            border-radius: 8px;
+            color: #b0b0d0;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .support-link:hover {
+            background: rgba(74, 111, 255, 0.2);
+            color: #6d8cff;
+            transform: translateY(-2px);
+        }
+        
         /* Адаптивность */
         @media (max-width: 992px) {
             .interface-container {
@@ -496,6 +524,11 @@
             
             .hero p {
                 font-size: 16px;
+            }
+            
+            .support-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
         
@@ -542,8 +575,6 @@
                     <a href="#interface">Интерфейс</a>
                     <a href="#download">Скачать</a>
                 </nav>
-                
-                <a href="#download" class="cta-button">Скачать бесплатно</a>
             </div>
         </div>
     </header>
@@ -553,12 +584,6 @@
         <div class="container">
             <h1>Системный монитор и инструмент управления для Windows</h1>
             <p>WinEdit предоставляет полный контроль над вашей системой с помощью четырех специализированных модулей: редактор реестра, управление автозапуском, диспетчер задач и мониторинг безопасности. Минималистичный интерфейс без нагрузки на систему.</p>
-            
-            <div style="margin-top: 35px;">
-                <a href="#download" class="cta-button" style="font-size: 16px; padding: 12px 30px;">
-                    <i class="fas fa-download"></i> Скачать для Windows
-                </a>
-            </div>
         </div>
     </section>
     
@@ -694,8 +719,8 @@
                 <p>Приложение работает только на Windows, так как использует специфичные для этой ОС библиотеки и команды. Оно не создает фоновых процессов, не обновляет данные автоматически и не нагружает систему в простое.</p>
                 
                 <div style="margin-top: 30px;">
-                    <a href="#" class="cta-button" style="font-size: 17px; padding: 14px 32px;">
-                        <i class="fas fa-download"></i> Скачать WinEdit v1.0 (4.2 MB)
+                    <a href="WineEdit.zip" class="cta-button" style="font-size: 17px; padding: 14px 32px;" download>
+                        <i class="fas fa-download"></i> Скачать WinEdit v1.0 (14 MB)
                     </a>
                 </div>
                 
@@ -721,6 +746,15 @@
                         <p>4 специализированных модуля</p>
                     </div>
                 </div>
+
+                <div class="support-links">
+                    <a href="https://t.me/GrazSuppBot" class="support-link" target="_blank">
+                        <i class="fab fa-telegram"></i> Поддержка: @GrazSuppBot
+                    </a>
+                    <a href="https://t.me/microflowteam" class="support-link" target="_blank">
+                        <i class="fab fa-telegram"></i> Наш канал: @microflowteam
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -741,6 +775,14 @@
                         <li><a href="#features">Управление автозапуском</a></li>
                         <li><a href="#features">Диспетчер задач</a></li>
                         <li><a href="#features">Мониторинг безопасности</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Поддержка</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://t.me/GrazSuppBot" target="_blank">Telegram-бот поддержки</a></li>
+                        <li><a href="https://t.me/microflowteam" target="_blank">Наш Telegram-канал</a></li>
                     </ul>
                 </div>
             </div>
