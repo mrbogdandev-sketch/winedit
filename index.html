@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinEdit - Системный монитор и инструмент управления для Windows</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Основные стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @font-face {
+            font-family: 'MainText';
+            src: url('maintext.otf') format('opentype');
+        }
+        
+        @font-face {
+            font-family: 'RegularText';
+            src: url('text.ttf') format('truetype');
+        }
+        
+        body {
+            font-family: 'RegularText', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 50%, #0c0c1d 100%);
+            min-height: 100vh;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'MainText', sans-serif;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Эффект стекла */
+        .glass-effect {
+            background: rgba(20, 25, 45, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-light {
+            background: rgba(30, 35, 60, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+        }
+        
+        /* Шапка */
+        header {
+            padding: 25px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4a6fff, #6d8cff);
+            border-radius: 10px;
+            font-size: 22px;
+            color: white;
+        }
+        
+        .logo-text {
+            font-family: 'MainText', sans-serif;
+            font-size: 24px;
+            background: linear-gradient(to right, #4a6fff, #8ba1ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            color: #b0b0d0;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s;
+            padding: 6px 0;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #6d8cff;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #4a6fff, #8ba1ff);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #4a6fff, #6d8cff);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'MainText', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(77, 111, 255, 0.4);
+        }
+        
+        /* Герой-секция */
+        .hero {
+            padding: 60px 0 80px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 18px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero p {
+            font-size: 17px;
+            color: #b0b0d0;
+            max-width: 650px;
+            margin: 0 auto 35px;
+        }
+        
+        /* Секция функций */
+        .features {
+            padding: 50px 0 80px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+        
+        .section-title p {
+            color: #b0b0d0;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .feature-card {
+            padding: 25px;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, rgba(74, 111, 255, 0.2), rgba(109, 140, 255, 0.1));
+            color: #6d8cff;
+        }
+        
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 142, 142, 0.1));
+            color: #ff6b6b;
+        }
+        
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, rgba(106, 255, 145, 0.2), rgba(142, 255, 172, 0.1));
+            color: #6aff91;
+        }
+        
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, rgba(255, 193, 69, 0.2), rgba(255, 213, 128, 0.1));
+            color: #ffc145;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+        
+        .feature-card p {
+            color: #b0b0d0;
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+        
+        /* Секция интерфейса */
+        .interface {
+            padding: 50px 0 80px;
+        }
+        
+        .interface-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .interface-text {
+            flex: 1;
+        }
+        
+        .interface-text h2 {
+            font-size: 32px;
+            margin-bottom: 18px;
+        }
+        
+        .interface-text p {
+            color: #b0b0d0;
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+        
+        .interface-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .app-window {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .window-header {
+            background: rgba(30, 35, 60, 0.9);
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .window-title {
+            font-family: 'MainText', sans-serif;
+            font-size: 16px;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .control-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .control-dot.red { background: #ff5f57; }
+        .control-dot.yellow { background: #ffbd2e; }
+        .control-dot.green { background: #28ca42; }
+        
+        .window-tabs {
+            display: flex;
+            background: rgba(20, 25, 45, 0.9);
+            padding: 0 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab {
+            padding: 12px 18px;
+            color: #b0b0d0;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .tab.active {
+            color: #6d8cff;
+            border-bottom-color: #6d8cff;
+        }
+        
+        .window-content {
+            background: rgba(15, 20, 40, 0.9);
+            padding: 25px;
+            min-height: 250px;
+        }
+        
+        .window-content p {
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .feature-list i {
+            color: #6d8cff;
+        }
+        
+        /* Секция загрузки */
+        .download {
+            padding: 60px 0 80px;
+            text-align: center;
+        }
+        
+        .download-box {
+            padding: 50px 35px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .download-box h2 {
+            font-size: 32px;
+            margin-bottom: 18px;
+        }
+        
+        .download-box p {
+            color: #b0b0d0;
+            margin-bottom: 35px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .system-requirements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-top: 35px;
+            text-align: left;
+        }
+        
+        .requirement {
+            padding: 18px;
+            border-radius: 8px;
+        }
+        
+        .requirement h4 {
+            margin-bottom: 10px;
+            color: #6d8cff;
+            font-size: 16px;
+        }
+        
+        .requirement p {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #b0b0d0;
+        }
+        
+        /* Подвал */
+        footer {
+            padding: 50px 0 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 35px;
+            margin-bottom: 35px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+        
+        .footer-column p {
+            color: #b0b0d0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #b0b0d0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: #6d8cff;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #8a8aa3;
+            font-size: 13px;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .interface-container {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 18px;
+            }
+            
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+        }
+        
+        /* Декоративные элементы */
+        .bg-blur-1 {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(74, 111, 255, 0.1) 0%, rgba(74, 111, 255, 0) 70%);
+            z-index: -1;
+        }
+        
+        .bg-blur-2 {
+            position: absolute;
+            bottom: 10%;
+            right: 5%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.08) 0%, rgba(255, 107, 107, 0) 70%);
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Декоративные фоновые элементы -->
+    <div class="bg-blur-1"></div>
+    <div class="bg-blur-2"></div>
+    
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <div class="logo-text">WinEdit</div>
+                </div>
+                
+                <nav class="nav-links">
+                    <a href="#features">Функции</a>
+                    <a href="#interface">Интерфейс</a>
+                    <a href="#download">Скачать</a>
+                </nav>
+                
+                <a href="#download" class="cta-button">Скачать бесплатно</a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Герой-секция -->
+    <section class="hero">
+        <div class="container">
+            <h1>Системный монитор и инструмент управления для Windows</h1>
+            <p>WinEdit предоставляет полный контроль над вашей системой с помощью четырех специализированных модулей: редактор реестра, управление автозапуском, диспетчер задач и мониторинг безопасности. Минималистичный интерфейс без нагрузки на систему.</p>
+            
+            <div style="margin-top: 35px;">
+                <a href="#download" class="cta-button" style="font-size: 16px; padding: 12px 30px;">
+                    <i class="fas fa-download"></i> Скачать для Windows
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Секция функций -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Мощные модули для полного контроля</h2>
+                <p>WinEdit состоит из четырех основных модулей, каждый из которых отвечает за определенный аспект работы системы</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- Карточка 1 -->
+                <div class="feature-card glass-effect">
+                    <div class="feature-icon">
+                        <i class="fas fa-folder-tree"></i>
+                    </div>
+                    <h3>Редактор реестра</h3>
+                    <p>Просматривайте содержимое системного реестра Windows в режиме только для чтения. Поддерживает все основные кусты реестра.</p>
+                    <div class="feature-tags">
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px; margin-right: 8px;">Только чтение</span>
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px;">Безопасность</span>
+                    </div>
+                </div>
+                
+                <!-- Карточка 2 -->
+                <div class="feature-card glass-effect">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Управление автозапуском</h3>
+                    <p>Собирает информацию о всех программах, которые запускаются автоматически при старте системы. Позволяет отключать ненужные элементы.</p>
+                    <div class="feature-tags">
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px; margin-right: 8px;">Оптимизация</span>
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px;">Автозагрузка</span>
+                    </div>
+                </div>
+                
+                <!-- Карточка 3 -->
+                <div class="feature-card glass-effect">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Диспетчер задач</h3>
+                    <p>Отображает список всех запущенных процессов с подробной информацией: PID, загрузка CPU, использование RAM, статус и пользователь.</p>
+                    <div class="feature-tags">
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px; margin-right: 8px;">Мониторинг</span>
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px;">Процессы</span>
+                    </div>
+                </div>
+                
+                <!-- Карточка 4 -->
+                <div class="feature-card glass-effect">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Мониторинг безопасности</h3>
+                    <p>Отображает информацию о сессиях Winlogon. Анализатор подозрительных процессов выявляет потенциальные угрозы по нескольким критериям.</p>
+                    <div class="feature-tags">
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px; margin-right: 8px;">Безопасность</span>
+                        <span class="glass-light" style="padding: 4px 8px; border-radius: 20px; font-size: 13px;">Анализ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Секция интерфейса -->
+    <section class="interface" id="interface">
+        <div class="container">
+            <div class="interface-container">
+                <div class="interface-text">
+                    <h2>Минималистичный интерфейс без графических эффектов</h2>
+                    <p>WinEdit разработан с акцентом на функциональность и минимальное использование ресурсов системы. Все модули объединены в одном окне с вкладками для удобной навигации.</p>
+                    <p>В нижней части окна находится строка состояния, которая показывает текущие операции и время. При первом запуске программа проверяет, запущена ли она с правами администратора.</p>
+                    
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Минимальная нагрузка на систему</li>
+                        <li><i class="fas fa-check-circle"></i> Обновление данных только по запросу</li>
+                        <li><i class="fas fa-check-circle"></i> Проверка прав администратора</li>
+                        <li><i class="fas fa-check-circle"></i> Предупреждения для системных процессов</li>
+                    </ul>
+                </div>
+                
+                <div class="interface-visual">
+                    <div class="app-window glass-effect">
+                        <div class="window-header">
+                            <div class="window-title">WinEdit - Системный монитор</div>
+                            <div class="window-controls">
+                                <div class="control-dot red"></div>
+                                <div class="control-dot yellow"></div>
+                                <div class="control-dot green"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="window-tabs">
+                            <div class="tab active">Реестр</div>
+                            <div class="tab">Автозапуск</div>
+                            <div class="tab">Процессы</div>
+                            <div class="tab">Безопасность</div>
+                        </div>
+                        
+                        <div class="window-content">
+                            <p>Текущий раздел реестра: <strong>HKEY_CURRENT_USER\Software\Microsoft</strong></p>
+                            <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px;">
+                                    <span>Имя</span>
+                                    <span>Тип</span>
+                                    <span>Данные</span>
+                                </div>
+                                <div style="height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 12px;"></div>
+                                <div style="display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px;">
+                                    <span>Windows</span>
+                                    <span>Раздел</span>
+                                    <span>(Значения не заданы)</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px; font-size: 12px; color: #8a8aa3;">
+                                <i class="fas fa-info-circle"></i> Режим только для чтения. Изменения не сохраняются.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Секция загрузки -->
+    <section class="download" id="download">
+        <div class="container">
+            <div class="download-box glass-effect">
+                <h2>Скачайте WinEdit бесплатно</h2>
+                <p>Приложение работает только на Windows, так как использует специфичные для этой ОС библиотеки и команды. Оно не создает фоновых процессов, не обновляет данные автоматически и не нагружает систему в простое.</p>
+                
+                <div style="margin-top: 30px;">
+                    <a href="#" class="cta-button" style="font-size: 17px; padding: 14px 32px;">
+                        <i class="fas fa-download"></i> Скачать WinEdit v1.0 (4.2 MB)
+                    </a>
+                </div>
+                
+                <div class="system-requirements">
+                    <div class="requirement glass-light">
+                        <h4><i class="fas fa-desktop"></i> Системные требования</h4>
+                        <p>Windows 10/11 (x64)</p>
+                        <p>2 ГБ оперативной памяти</p>
+                        <p>50 МБ свободного места</p>
+                    </div>
+                    
+                    <div class="requirement glass-light">
+                        <h4><i class="fas fa-shield-alt"></i> Безопасность</h4>
+                        <p>Не требует интернет-соединения</p>
+                        <p>Проверка прав администратора</p>
+                        <p>Режим только для чтения реестра</p>
+                    </div>
+                    
+                    <div class="requirement glass-light">
+                        <h4><i class="fas fa-cube"></i> Особенности</h4>
+                        <p>Минималистичный интерфейс</p>
+                        <p>Обновление по запросу</p>
+                        <p>4 специализированных модуля</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>WinEdit</h3>
+                    <p>Мощный системный монитор и инструмент управления для операционной системы Windows. Разработан для профессионалов и продвинутых пользователей.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Модули</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Редактор реестра</a></li>
+                        <li><a href="#features">Управление автозапуском</a></li>
+                        <li><a href="#features">Диспетчер задач</a></li>
+                        <li><a href="#features">Мониторинг безопасности</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 WinEdit. Все права защищены. Приложение предназначено только для операционной системы Windows.</p>
+                <p style="margin-top: 8px; font-size: 12px;">WinEdit не связан с Microsoft Corporation. Windows является зарегистрированной торговой маркой Microsoft Corporation.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Простой скрипт для переключения вкладок в демо-интерфейсе
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Плавная прокрутка для навигационных ссылок
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
